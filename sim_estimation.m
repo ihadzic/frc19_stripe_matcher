@@ -16,6 +16,26 @@ projected_points = project_points(cal_dist, cal_span_x, cal_span_y, ...
                                   offset_x, offset_y, distance, ...
                                   use_meters);
 observed_points = add_error(projected_points, bias, noise);
+
+% good stuff: estimate the distance and offset
+Ax = [ normalized_reference_points(:, 1)'; ...
+       -ones(1, length(normalized_reference_points(:, 1)))]';
+Ay = [ normalized_reference_points(:, 2)'; ...
+       -ones(1, length(normalized_reference_points(:, 2)))]';
+soltn_x = (Ax' * Ax)^-1*Ax' * observed_points(:, 1);
+soltn_y = (Ay' * Ay)^-1*Ay' * observed_points(:, 2);
+% work backwards to get the distance and offset
+sigma_dx = soltn_x(1);
+sigma_dy = soltn_y(1);
+tau_x = soltn_x(2)/sigma_dx;
+tau_y = soltn_y(2)/sigma_dy;
+dist_est_x = cal_span_x * (1 + 1 / (2 * tan(deg2rad(view_angle_x / 2))) * ...
+                           (1 - sigma_dx) / sigma_dx);
+dist_est_y = cal_span_y * (1 + 1 / (2 * tan(deg2rad(view_angle_y / 2))) * ...
+                           (1 - sigma_dy) / sigma_dy);
+d = (dist_est_x + dist_est_y) / 2;
+x = cal_span_x / 2 * tau_x;
+y = cal_span_y / 2 * tau_y;
 if nargin > 11
   if do_plot
     plot(normalized_reference_points(:, 1), ...
@@ -24,4 +44,3 @@ if nargin > 11
     grid
   end
 end
-% TODO: actually simulate here
