@@ -7,8 +7,8 @@ if nargin <= 6
 end
 reference_points = get_reference_points(use_meters);
 normalized_reference_points =  [ ...
-    reference_points(:, 1)' / cal_span_x; ...
-    reference_points(:, 2)' / cal_span_y ]';
+    2 * reference_points(:, 1)' / cal_span_x; ...
+    2 * reference_points(:, 2)' / cal_span_y ]';
 delta_d = distance - cal_dist;
 fpx = frustum_projection(cal_span_x, view_angle_x, delta_d);
 fpy = frustum_projection(cal_span_y, view_angle_y, delta_d);
