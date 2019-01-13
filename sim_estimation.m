@@ -29,10 +29,10 @@ sigma_dx = soltn_x(1);
 sigma_dy = soltn_y(1);
 tau_x = soltn_x(2)/sigma_dx;
 tau_y = soltn_y(2)/sigma_dy;
-dist_est_x = cal_span_x * (1 + 1 / (2 * tan(deg2rad(view_angle_x / 2))) * ...
-                           (1 - sigma_dx) / sigma_dx);
-dist_est_y = cal_span_y * (1 + 1 / (2 * tan(deg2rad(view_angle_y / 2))) * ...
-                           (1 - sigma_dy) / sigma_dy);
+ttx = tan(deg2rad(view_angle_x / 2));
+tty = tan(deg2rad(view_angle_y / 2));
+dist_est_x = cal_dist + cal_span_x  / (2 * ttx) * (1 - sigma_dx) / sigma_dx;
+dist_est_y = cal_dist + cal_span_y  / (2 * tty) * (1 - sigma_dy) / sigma_dy;
 d = (dist_est_x + dist_est_y) / 2;
 x = cal_span_x / 2 * tau_x;
 y = cal_span_y / 2 * tau_y;
